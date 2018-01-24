@@ -22,7 +22,7 @@
     </requirements>
 
     <preferences>
-        <preference name="prop_name" type="text" label="Property name" description="Name of the property containing the data to be filtered" />
+        <preference name="prop_name" type="text" label="Property name" description="Name of the property containing the data to be filtered" default="poi.data.location" />
     </preferences>
 
     <wiring>
