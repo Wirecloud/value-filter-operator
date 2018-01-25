@@ -4,10 +4,12 @@
 
     "use strict";
 
-    describe("Test ValueFilter", function () {
+    describe("ValueFilter", function () {
 
         beforeAll(function () {
-            window.MashupPlatform = new MockMP.MockMP();
+            window.MashupPlatform = new MockMP({
+                type: 'operator'
+            });
         });
 
         beforeEach(function () {

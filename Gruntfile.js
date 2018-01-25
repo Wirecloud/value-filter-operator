@@ -1,8 +1,8 @@
 /*
  * value-filter
- * https://github.com/Wirecloud/value-filter
+ * https://github.com/Wirecloud/value-filter-operator
  *
- * Copyright (c) 2018 Universidad Politécnica de Madrid
+ * Copyright (c) 2018 CoNWeT Lab., Universidad Politecnica de Madrid
  * Licensed under the MIT license.
  */
 
@@ -43,16 +43,15 @@ module.exports = function (grunt) {
             }
         },
 
+        coveralls: {
+            library: {
+                src: 'build/coverage/lcov/lcov.info',
+            }
+        },
+
         strip_code: {
-            multiple_files: {
+            test_code: {
                 src: ['build/src/js/**/*.js']
-            },
-            imports: {
-                options: {
-                    start_comment: 'import-block',
-                    end_comment: 'end-import-block'
-                },
-                src: ['src/js/*.js']
             }
         },
 
@@ -108,32 +107,53 @@ module.exports = function (grunt) {
             }
         },
 
-        jasmine: {
-            test: {
-                src: ['src/js/*.js', '!src/js/main.js'],
+        karma: {
+            options: {
+                customLaunchers: {
+                    ChromeNoSandbox: {
+                        base: "Chrome",
+                        flags: ['--no-sandbox']
+                    }
+                },
+                files: [
+                    'node_modules/mock-applicationmashup/dist/MockMP.js',
+                    'src/js/*.js',
+                    'tests/js/*Spec.js'
+                ],
+                exclude: [
+                    'src/js/main.js',
+                ],
+                frameworks: ['jasmine'],
+                reporters: ['progress', 'coverage'],
+                browsers: ['Chrome', 'Firefox'],
+                singleRun: true
+            },
+            operator: {
                 options: {
-                    specs: 'src/test/js/*Spec.js',
-                    helpers: ['src/test/helpers/*.js'],
-                    vendor: [
-                        'node_modules/mock-applicationmashup/lib/vendor/mockMashupPlatform.js',
-                        'src/test/vendor/*.js'
-                    ]
+                    coverageReporter: {
+                        type: 'html',
+                        dir: 'build/coverage'
+                    },
+                    preprocessors: {
+                        'src/js/*.js': ['coverage'],
+                    }
                 }
             },
-            coverage: {
-                src: '<%= jasmine.test.src %>',
+            operatorci: {
                 options: {
-                    helpers: '<%= jasmine.test.options.helpers %>',
-                    specs: '<%= jasmine.test.options.specs %>',
-                    vendor: '<%= jasmine.test.options.vendor %>',
-                    template: require('grunt-template-jasmine-istanbul'),
-                    templateOptions: {
-                        coverage: 'build/coverage/json/coverage.json',
-                        report: [
-                            {type: 'html', options: {dir: 'build/coverage/html'}},
-                            {type: 'cobertura', options: {dir: 'build/coverage/xml'}},
-                            {type: 'text-summary'}
+                    junitReporter: {
+                        "outputDir": 'build/test-reports'
+                    },
+                    reporters: ['junit', 'coverage'],
+                    browsers: ['ChromeNoSandbox', 'Firefox'],
+                    coverageReporter: {
+                        reporters: [
+                            {type: 'cobertura', dir: 'build/coverage', subdir: 'xml'},
+                            {type: 'lcov', dir: 'build/coverage', subdir: 'lcov'},
                         ]
+                    },
+                    preprocessors: {
+                        "src/js/*.js": ['coverage'],
                     }
                 }
             }
@@ -151,17 +171,24 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-wirecloud');
-    grunt.loadNpmTasks('grunt-contrib-jasmine'); // when test?
+    grunt.loadNpmTasks('grunt-karma'); // when test?
     grunt.loadNpmTasks('gruntify-eslint');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
         'eslint',
-        'jasmine:coverage'
+        'karma:operator'
+    ]);
+
+    grunt.registerTask('ci', [
+        'eslint',
+        'karma:operatorci',
+        'coveralls'
     ]);
 
     grunt.registerTask('build', [

@@ -1,6 +1,7 @@
-# Value filter from JSON operator operator
+# Value Filter operator
 
-The Value filter from JSON operator operator is a WireCloud operator that provides a simple mechanism of filtering a JSON data structure, produced by an output endpoint, and extracts a single data inside such structure. The path to the extracted data is indicated through a preference in a dot-sepparated syntax.
+The Value Filter operator is a WireCloud operator that provides a simple mechanism of filtering a JSON data structure, produced by an output endpoint, and extracts a single data inside such structure. The path to the extracted data is indicated through a preference in a dot-sepparated syntax.
+
 
 ## Build dependencies
 
@@ -46,5 +47,5 @@ available on Read the Docs.
 
 ## Copyright and License
 
-Copyright (c) 2018 Universidad Politécnica de Madrid
+Copyright (c) 2018 CoNWeT Lab., Universidad Politecnica de Madrid
 Licensed under the MIT license.
