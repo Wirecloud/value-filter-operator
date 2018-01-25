@@ -15,7 +15,8 @@ sudo apt install nodejs npm
 
 You also have to install the [Grunt](https://gruntjs.com/)'s command line interface (CLI):
 
-```sudo npm install -g grunt-cli
+```bash
+sudo npm install -g grunt-cli
 ```
 
 The remaining dependencies are installed using npm (you have to run this command
