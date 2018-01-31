@@ -1,5 +1,8 @@
 # Value Filter operator
 
+[![Build Status](https://travis-ci.org/Wirecloud/value-filter-operator.svg?branch=develop)](https://travis-ci.org/Wirecloud/value-filter-operator)
+[![Coverage Status](https://coveralls.io/repos/github/Wirecloud/value-filter-operator/badge.svg?branch=develop)](https://coveralls.io/github/Wirecloud/value-filter-operator?branch=develop)
+
 The Value Filter operator is a WireCloud operator that provides a simple mechanism of filtering a JSON data structure, produced by an output endpoint, and extracts a single data inside such structure. The path to the extracted data is indicated through a preference in a dot-sepparated syntax.
 
 
