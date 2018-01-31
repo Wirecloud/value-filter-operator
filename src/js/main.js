@@ -15,16 +15,19 @@
             try {
                 data = JSON.parse(data);
             } catch (e) {
-                throw new MashupPlatform.wiring.EndpointTypeValue();
+                throw new MashupPlatform.wiring.EndpointTypeError();
             }
-        } else if (data == null || typeof data !== "object") {
-            throw new MashupPlatform.wiring.EndpointTypeValue();
         }
+
+        if (data == null || typeof data !== "object") {
+            throw new MashupPlatform.wiring.EndpointTypeError();
+        }
+
         return data;
     };
 
-    var index = function index(obj,i) {
-        return obj[i]
+    var index = function index(obj, i) {
+        return obj == null ? null : obj[i];
     };
 
     var filterData = function filterData(event_data) {
@@ -38,13 +41,15 @@
         }
     };
 
-    MashupPlatform.wiring.registerCallback('inputData', filterData);
-    MashupPlatform.prefs.registerCallback(function (new_preferences) {
-
-    }.bind(this));
+    /* TODO
+     * this if is required for testing, but we have to search a cleaner way
+     */
+    if (window.MashupPlatform != null) {
+        MashupPlatform.wiring.registerCallback('inputData', filterData);
+    }
 
     /* test-code */
-
+    window.filterData = filterData;
     /* end-test-code */
 
 })();
