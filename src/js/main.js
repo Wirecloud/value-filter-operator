@@ -19,7 +19,7 @@
             }
         }
 
-        if (data == null || typeof data !== "object") {
+        if (typeof data !== "object") {
             throw new MashupPlatform.wiring.EndpointTypeError();
         }
 
@@ -32,12 +32,20 @@
 
     var filterData = function filterData(event_data) {
         var data = parseInputEndpointData(event_data);
-        var value;
+        var send_nulls = MashupPlatform.prefs.get("send_nulls");
+        if (data == null && send_nulls) {
+            MashupPlatform.wiring.pushEvent('outputData', null);
+        } else if (data == null) {
+            return; // do nothing
+        }
+
         var path = MashupPlatform.prefs.get('prop_name');
         if (path !== "") {
-            value = path.split('.').reduce(index, data);
+            var value = path.split('.').reduce(index, data);
             value = (value == undefined ? null : value);
-            MashupPlatform.wiring.pushEvent('outputData', value);
+            if (value != null || MashupPlatform.prefs.get("send_nulls")) {
+                MashupPlatform.wiring.pushEvent('outputData', value);
+            }
         }
     };
 
