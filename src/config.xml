@@ -23,7 +23,7 @@
 
     <preferences>
         <preference name="prop_name" type="text" label="Property name" description="Name of the property containing the data to be filtered" default="poi.data.location" />
-        <preference name="send_nulls" type="text" label="Send Nulls" description="Enable this option to propagate null values, leave it disable to filter null events" default="true" />
+        <preference name="send_nulls" type="boolean" label="Send Nulls" description="Enable this option to propagate null values, leave it disable to filter null events" default="true" />
     </preferences>
 
     <wiring>
